@@ -1,16 +1,12 @@
 # webview_js
 
-A new Flutter project.
+本專案利用JS套件實作打包成H5後與App端的Webview做交互
 
-## Getting Started
+## How to build
 
-This project is a starting point for a Flutter application.
+1. 執行`flutter clean & flutter build web`
+2. 生成的檔案在build/web裡面，利用文字編輯器打開index.html，並找到以下`<base href="/">`，改成`<base href="">`
+3. 將所有檔案放到server上，在本地會打不開
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Warning
+- 由於內部呼叫了InAppWebview的js監聽語法，務必要用InAppWebview打開，否則報錯
