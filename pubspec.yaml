@@ -38,6 +38,9 @@ dependencies:
   # web js呼叫flutter方法的套件
   js: ^0.6.5
 
+  # 路由
+  fluro:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
