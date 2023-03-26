@@ -1,6 +1,8 @@
 @JS()
 library callable_function;
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:js/js.dart';
 
@@ -21,12 +23,19 @@ external void receiveData();
 
 /// Allows assigning a function to be callable from `window.receiveListMapData()`
 @JS('receiveListMapData')
-external set _receiveListMapData(
-    void Function(List<Map<String, dynamic>> map) f);
+external set _receiveListMapData(void Function(List<String> listMap) f);
 
 /// Allows calling the assigned function from Dart as well.
 @JS()
 external void receiveListMapData();
+
+/// Allows assigning a function to be callable from `window.receiveIntData()`
+@JS('receiveIntData')
+external set _receiveIntData(void Function(int id) f);
+
+/// Allows calling the assigned function from Dart as well.
+@JS()
+external void receiveIntData();
 
 /// Calls invoke JavaScript `window.flutter_inappwebview.callHandler(key, value)`.
 @JS('window.flutter_inappwebview.callHandler')
@@ -38,12 +47,14 @@ class _WebJsState extends State<WebJs> {
     // TODO: implement initState
     _receiveData = allowInterop(_receiveDataFunc);
     _receiveListMapData = allowInterop(_receiveListMapDataFunc);
+    _receiveIntData = allowInterop(_receiveIntDataFunc);
     _sendDataToJs("is_finish_load", "1");
     super.initState();
   }
 
   String _txt = "";
   String _txt2 = "";
+  String _txt3 = "";
 
   void _receiveDataFunc(String str) {
     setState(() {
@@ -51,9 +62,21 @@ class _WebJsState extends State<WebJs> {
     });
   }
 
-  void _receiveListMapDataFunc(List<Map<String, dynamic>> map) {
+  void _receiveListMapDataFunc(List<String> listMap) {
+    String val = "";
+    for (int i = 0; i < listMap.length; i++) {
+      Map map = json.decode(listMap[i]);
+      val += map["value"];
+    }
     setState(() {
-      _txt2 = map.toString();
+      _txt2 = val;
+    });
+  }
+
+  void _receiveIntDataFunc(int id) {
+    setState(() {
+      int receiveId = id;
+      _txt3 = receiveId.toString();
     });
   }
 
@@ -80,6 +103,15 @@ class _WebJsState extends State<WebJs> {
             ),
             Text(
               _txt2,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              _txt3,
               style: const TextStyle(
                 fontSize: 16,
               ),
